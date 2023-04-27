@@ -1,12 +1,109 @@
-import { Button, Input, AppBar, Box, Toolbar, Typography } from "@mui/material";
+import { MenuItem, Button, InputLabel, TextField, FormControl, AppBar, Box, Toolbar, Typography } from "@mui/material";
+import UploadFileIcon from "@mui/icons-material/UploadFile";
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, ChangeEvent } from "react";
+import Select, { SelectChangeEvent } from '@mui/material/Select';
 import "./App.scss";
 
 function App() {
 	// usestate for setting a javascript
 	// object for storing and using data
 	var rows = [];
+    const [district, setDistrict] = useState();
+    const [address, setAddress] = useState();
+    const [signType, setSignType] = useState();
+    const [signTechnology, setSignTechnology] = useState();
+    const [signSize, setSignSize] = useState();
+    const [signStatus, setSignStatus] = useState();
+    const [signCondition, setSignCondition] = useState();
+    const [parcelId, setParcelId] = useState();
+    const [parcelOwner, setParcelOwner] = useState();
+    const [parcelOwnerAddress, setParcelOwnerAddress] = useState();
+    const [businessName, setBusinessName] = useState();
+    const [renewalStatus, setRenewalStatus] = useState();
+    const [fileName, setFileName] = useState("");
+
+    const date = new Date();
+
+    const handleNewRow = (event) => {
+        event.preventDefault();
+        
+        fetch('/upload_photo')
+        console.log({
+            'address: ': address,
+            'district: ': district,
+            'signType: ': signType,
+            'signTechnology: ': signTechnology,
+            'signSize: ': signSize,
+            'signStatus: ': signStatus, 
+            'signCondition: ': signCondition,
+            'parcelId: ': parcelId,
+            'parcelOwner: ': parcelOwner,
+            'parcelOwnerAddress: ': parcelOwnerAddress,
+            'businessName: ': businessName,
+            'renewalStatus: ': renewalStatus,
+            'fileName: ': fileName
+        })
+    }
+
+    const handleFileUpload = (e: ChangeEvent<HTMLInputElement>) => {
+        if (!e.target.files) {
+          return;
+        }
+        const file = e.target.files[0];
+        const { name } = file;
+        setFileName(name);
+    };
+
+        // make api call to upload to blob
+
+    const handleRenewalStatus = (event: SelectChangeEvent) => {
+        setRenewalStatus(event.target.value);
+    };
+
+    const handleBusinessName = (event: ChangeEvent<HTMLInputElement>) => {
+        setBusinessName(event.target.value);
+    };
+
+    const handleParcelOwnerAddress = (event: ChangeEvent<HTMLInputElement>) => {
+        setParcelOwnerAddress(event.target.value);
+    };
+
+    const handleParcelOwner = (event: ChangeEvent<HTMLInputElement>) => {
+        setParcelOwner(event.target.value);
+    };
+
+    const handleParcelId = (event: ChangeEvent<HTMLInputElement>) => {
+        setParcelId(event.target.value);
+    };
+
+    const handleSignCondition = (event: SelectChangeEvent) => {
+        setSignCondition(event.target.value);
+    };
+
+    const handleSignStatus = (event: SelectChangeEvent) => {
+        setSignStatus(event.target.value);
+    };
+
+    const handleSignSize = (event: ChangeEvent<HTMLInputElement>) => {
+        setSignSize(event.target.value);
+    };
+
+    const handleSignTechnology = (event: SelectChangeEvent) => {
+        setSignTechnology(event.target.value);
+    };
+
+    const handleSignType = (event: SelectChangeEvent) => {
+        setSignType(event.target.value);
+    };
+
+    const handleAddressChange = (event: ChangeEvent<HTMLInputElement>) => {
+        setAddress(event.target.value);
+    };
+
+    const handleDistrictChange = (event: SelectChangeEvent) => {
+        setDistrict(event.target.value);
+    };
 
 	// Using useEffect for single rendering
 	useEffect(() => {
@@ -65,9 +162,161 @@ function App() {
                     <DataGrid {...dataGridProps} getRowHeight={() => 'auto'} />
                 </Box>
             </div>
+            <div className="add-geodb">
+            <Typography variant="h6">
+                Add to geodatabase
+            </Typography>
+            <form onSubmit={handleNewRow}>
+                <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
+                    <TextField defaultValue="" id="standard-basic" label="Address" variant="standard" value={address ?? ""} onChange={handleAddressChange}/>
+                </FormControl>
+
+                <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
+                    <InputLabel id="demo-simple-select-standard-label"> District </InputLabel>
+                    <Select
+                    defaultValue=""
+                    labelId="demo-simple-select-standard-label"
+                    id="demo-simple-select-standard"
+                    value={district ?? ""}
+                    onChange={handleDistrictChange}
+                    label="Age"
+                    >
+                    <MenuItem value={1}>1</MenuItem>
+                    <MenuItem value={2}>2</MenuItem>
+                    <MenuItem value={3}>3</MenuItem>
+                    <MenuItem value={4}>4</MenuItem>
+                    <MenuItem value={5}>5</MenuItem>
+                    <MenuItem value={6}>6</MenuItem>
+                    <MenuItem value={7}>7</MenuItem>
+                    <MenuItem value={8}>8</MenuItem>
+                    <MenuItem value={9}>9</MenuItem>
+                    <MenuItem value={10}>10</MenuItem>
+                    <MenuItem value={11}>11</MenuItem>
+                    <MenuItem value={12}>12</MenuItem>
+                    <MenuItem value={13}>13</MenuItem>
+                    </Select>
+                </FormControl>
+
+                <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
+                    <InputLabel id="demo-simple-select-standard-label"> Sign Type </InputLabel>
+                    <Select
+                    defaultValue=""
+                    labelId="demo-simple-select-standard-label"
+                    id="demo-simple-select-standard"
+                    value={signType ?? ""}
+                    onChange={handleSignType}
+                    label="Sign Type"
+                    >
+                    <MenuItem value={'commerical'}>commercial</MenuItem>
+                    <MenuItem value={'advertisment'}>advertisment</MenuItem>
+                    </Select>
+                </FormControl>
+
+                <FormControl variant="standard" sx={{ m: 1, minWidth: 140 }}>
+                    <InputLabel id="demo-simple-select-standard-label"> Sign Technology </InputLabel>
+                    <Select
+                    defaultValue=""
+                    labelId="demo-simple-select-standard-label"
+                    id="demo-simple-select-standard"
+                    value={signTechnology ?? ""}
+                    onChange={handleSignTechnology}
+                    label="Sign Technology"
+                    >
+                    <MenuItem value={'electric'}>electric</MenuItem>
+                    <MenuItem value={'billboard'}>billboard</MenuItem>
+                    <MenuItem value={'sign'}>sign</MenuItem>
+                    <MenuItem value={'other'}>other</MenuItem>
+                    </Select>
+                </FormControl>
+
+                <FormControl variant="standard" sx={{ m: 1, width: 80 }}>
+                    <TextField defaultValue="" id="standard-basic" label="Sign Size" variant="standard" value={signSize} onChange={handleSignSize}/>
+                </FormControl>
+
+                <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
+                    <InputLabel id="demo-simple-select-standard-label"> Sign Status </InputLabel>
+                    <Select
+                    defaultValue=""
+                    labelId="demo-simple-select-standard-label"
+                    id="demo-simple-select-standard"
+                    value={signStatus ?? ""}
+                    onChange={handleSignStatus}
+                    label="Sign Status"
+                    >
+                    <MenuItem value={'active'}>active</MenuItem>
+                    <MenuItem value={'inactive'}>inactive</MenuItem>
+                    </Select>
+                </FormControl>
+
+                <FormControl variant="standard" sx={{ m: 1, minWidth: 160 }}>
+                    <InputLabel id="demo-simple-select-standard-label"> Sign Condition </InputLabel>
+                    <Select
+                    defaultValue=""
+                    labelId="demo-simple-select-standard-label"
+                    id="demo-simple-select-standard"
+                    value={signCondition ?? ""}
+                    onChange={handleSignCondition}
+                    label="Sign Condition"
+                    >
+                    <MenuItem value={'poor'}>poor</MenuItem>
+                    <MenuItem value={'fair'}>fair</MenuItem>
+                    <MenuItem value={'good'}>good</MenuItem>
+                    </Select>
+                </FormControl>
+
+                <FormControl variant="standard" sx={{ m: 1, width: 80 }}>
+                    <TextField defaultValue="" id="standard-basic" label="Parcel ID" variant="standard" value={parcelId ?? "" } onChange={handleParcelId}/>
+                </FormControl>
+
+                <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
+                    <TextField defaultValue="" id="standard-basic" label="Parcel Owner" variant="standard" value={parcelOwner ?? ""} onChange={handleParcelOwner}/>
+                </FormControl>
+
+                <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
+                    <TextField defaultValue="" id="standard-basic" label="Parcel Owner Address" variant="standard" value={parcelOwnerAddress ?? ""} onChange={handleParcelOwnerAddress}/>
+                </FormControl>
+
+                <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
+                    <TextField defaultValue="" id="standard-basic" label="Business Name" variant="standard" value={businessName ?? ""} onChange={handleBusinessName}/>
+                </FormControl>
+
+                <FormControl variant="standard" sx={{ m: 1, minWidth: 140 }}>
+                    <InputLabel id="demo-simple-select-standard-label"> Renewal Status </InputLabel>
+                    <Select
+                    defaultValue=""
+                    labelId="demo-simple-select-standard-label"
+                    id="demo-simple-select-standard"
+                    value={renewalStatus ?? ""}
+                    onChange={handleRenewalStatus}
+                    label="Renewal Status"
+                    >
+                    <MenuItem value={date.getFullYear()+1-date.getMonth()+1-date.getDate()}> {date.getFullYear()+1}-{date.getMonth()+1}-{date.getDate()} </MenuItem>
+
+                    </Select>
+                </FormControl>
+
+                <Button
+                    className="file-upload"
+                    component="label"
+                    variant="contained"
+                    startIcon={<UploadFileIcon />}
+                    hidden={true}
+                    sx={{ marginRight: "1rem" }}
+                >
+                    Upload File
+                    <input type="file" accept="image/png, image/jpeg" onChange={handleFileUpload} hidden/>
+                    <Box style={{marginLeft: '10px'}}> {fileName}</Box>
+                </Button>
+
+                <Button type="submit" variant="contained"> Submit </Button>
+            </form>
+            
+
+            </div>
+
             <div className="download-geodb">
                 <Typography variant="h6">
-                    
+
                 Download as Geodatabase
                 </Typography>
                 <Typography variant="h6"> 
