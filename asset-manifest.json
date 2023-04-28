@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/GeodbGenerator/static/css/main.17f9d13f.css",
-    "main.js": "/GeodbGenerator/static/js/main.053c5ed2.js",
+    "main.js": "/GeodbGenerator/static/js/main.c21cd9f9.js",
     "index.html": "/GeodbGenerator/index.html",
     "main.17f9d13f.css.map": "/GeodbGenerator/static/css/main.17f9d13f.css.map",
-    "main.053c5ed2.js.map": "/GeodbGenerator/static/js/main.053c5ed2.js.map"
+    "main.c21cd9f9.js.map": "/GeodbGenerator/static/js/main.c21cd9f9.js.map"
   },
   "entrypoints": [
     "static/css/main.17f9d13f.css",
-    "static/js/main.053c5ed2.js"
+    "static/js/main.c21cd9f9.js"
   ]
 }
