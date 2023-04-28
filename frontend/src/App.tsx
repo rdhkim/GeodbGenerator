@@ -9,50 +9,66 @@ function App() {
 	// usestate for setting a javascript
 	// object for storing and using data
 	var rows = [];
-    const [district, setDistrict] = useState();
-    const [address, setAddress] = useState();
-    const [signType, setSignType] = useState();
-    const [signTechnology, setSignTechnology] = useState();
-    const [signSize, setSignSize] = useState();
-    const [signStatus, setSignStatus] = useState();
-    const [signCondition, setSignCondition] = useState();
-    const [parcelId, setParcelId] = useState();
-    const [parcelOwner, setParcelOwner] = useState();
-    const [parcelOwnerAddress, setParcelOwnerAddress] = useState();
-    const [businessName, setBusinessName] = useState();
-    const [renewalStatus, setRenewalStatus] = useState();
-    const [fileName, setFileName] = useState("");
+    const [district, setDistrict] = useState(null);
+    const [address, setAddress] = useState('');
+    const [signType, setSignType] = useState('');
+    const [signTechnology, setSignTechnology] = useState('');
+    const [signSize, setSignSize] = useState(null);
+    const [signStatus, setSignStatus] = useState('');
+    const [signCondition, setSignCondition] = useState('');
+    const [parcelId, setParcelId] = useState('');
+    const [parcelOwner, setParcelOwner] = useState('');
+    const [parcelOwnerAddress, setParcelOwnerAddress] = useState('');
+    const [businessName, setBusinessName] = useState('');
+    const [renewalStatus, setRenewalStatus] = useState('');
+    const [fileName, setFileName] = useState('');
+    const [fileData, setFileData] = useState<File | null>(null);
+    var loading = true;
 
     const date = new Date();
 
-    const handleNewRow = (event) => {
+    const handleNewRow = async (event) => {
         event.preventDefault();
-        
-        fetch('/upload_photo')
+
         console.log({
-            'address: ': address,
-            'district: ': district,
-            'signType: ': signType,
-            'signTechnology: ': signTechnology,
-            'signSize: ': signSize,
-            'signStatus: ': signStatus, 
-            'signCondition: ': signCondition,
-            'parcelId: ': parcelId,
-            'parcelOwner: ': parcelOwner,
-            'parcelOwnerAddress: ': parcelOwnerAddress,
-            'businessName: ': businessName,
-            'renewalStatus: ': renewalStatus,
-            'fileName: ': fileName
+            'Address': address,
+            'District': district,
+            'Sign Type': signType,
+            'Sign Technology': signTechnology,
+            'Sign Size': signSize,
+            'Sign Status': signStatus,
+            'Sign Condition': signCondition,
+            'Parcel Id': parcelId,
+            'Parcel Owner Address': parcelOwnerAddress,
+            'Business Name': businessName,
+            'Renewal Status': renewalStatus,
+            'File Name': fileName,
+            'File Data': fileData
         })
+
+        setAddress('')
+        setDistrict('')
+        setSignType('')
+        setSignTechnology('')
+        setSignSize('')
+        setSignStatus('')
+        setSignCondition('')
+        setParcelId('')
+        setParcelOwner('')
+        setParcelOwnerAddress('')
+        setBusinessName('')
+        setFileData(null)
+        setRenewalStatus('')
+        setFileName('')
+
     }
 
     const handleFileUpload = (e: ChangeEvent<HTMLInputElement>) => {
-        if (!e.target.files) {
+        if (!e.target.files[0]) {
           return;
         }
-        const file = e.target.files[0];
-        const { name } = file;
-        setFileName(name);
+        setFileName(e.target.files[0].name);
+        setFileData(e.target.files[0]);
     };
 
         // make api call to upload to blob
@@ -109,15 +125,18 @@ function App() {
 	useEffect(() => {
 		// Using fetch to fetch the api from
 		// flask server it will be redirected to proxy
-		fetch("/get_db").then((res) =>
+        if (loading == true) {
+            fetch("/get_db").then((res) =>
 			res.json().then((data) => {
 				// Setting a data from api
                 setDataGridProps({
                     columns: columns,
                     rows: data
-                })
-			})
-		);
+                    })
+			    })
+		    );
+            loading = false;
+        }
 	}, []);
 
     const columns: GridColDef = [
@@ -166,9 +185,9 @@ function App() {
             <Typography variant="h6">
                 Add to geodatabase
             </Typography>
-            <form onSubmit={handleNewRow}>
+            <form onSubmit={handleNewRow} className="add-new-row">
                 <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
-                    <TextField defaultValue="" id="standard-basic" label="Address" variant="standard" value={address ?? ""} onChange={handleAddressChange}/>
+                    <TextField id="standard-basic" label="Address" variant="standard" value={address ?? ""} onChange={handleAddressChange}/>
                 </FormControl>
 
                 <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
@@ -230,7 +249,7 @@ function App() {
                 </FormControl>
 
                 <FormControl variant="standard" sx={{ m: 1, width: 80 }}>
-                    <TextField defaultValue="" id="standard-basic" label="Sign Size" variant="standard" value={signSize} onChange={handleSignSize}/>
+                    <TextField id="standard-basic" label="Sign Size" variant="standard" value={signSize ?? ""} onChange={handleSignSize}/>
                 </FormControl>
 
                 <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
@@ -265,19 +284,19 @@ function App() {
                 </FormControl>
 
                 <FormControl variant="standard" sx={{ m: 1, width: 80 }}>
-                    <TextField defaultValue="" id="standard-basic" label="Parcel ID" variant="standard" value={parcelId ?? "" } onChange={handleParcelId}/>
+                    <TextField id="standard-basic" label="Parcel ID" variant="standard" value={parcelId ?? "" } onChange={handleParcelId}/>
                 </FormControl>
 
                 <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
-                    <TextField defaultValue="" id="standard-basic" label="Parcel Owner" variant="standard" value={parcelOwner ?? ""} onChange={handleParcelOwner}/>
+                    <TextField id="standard-basic" label="Parcel Owner" variant="standard" value={parcelOwner ?? ""} onChange={handleParcelOwner}/>
                 </FormControl>
 
                 <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
-                    <TextField defaultValue="" id="standard-basic" label="Parcel Owner Address" variant="standard" value={parcelOwnerAddress ?? ""} onChange={handleParcelOwnerAddress}/>
+                    <TextField id="standard-basic" label="Parcel Owner Address" variant="standard" value={parcelOwnerAddress ?? ""} onChange={handleParcelOwnerAddress}/>
                 </FormControl>
 
                 <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
-                    <TextField defaultValue="" id="standard-basic" label="Business Name" variant="standard" value={businessName ?? ""} onChange={handleBusinessName}/>
+                    <TextField id="standard-basic" label="Business Name" variant="standard" value={businessName ?? ""} onChange={handleBusinessName}/>
                 </FormControl>
 
                 <FormControl variant="standard" sx={{ m: 1, minWidth: 140 }}>
@@ -304,7 +323,7 @@ function App() {
                     sx={{ marginRight: "1rem" }}
                 >
                     Upload File
-                    <input type="file" accept="image/png, image/jpeg" onChange={handleFileUpload} hidden/>
+                    <input type="file" name="file" accept="image/png, image/jpeg" onChange={handleFileUpload} hidden/>
                     <Box style={{marginLeft: '10px'}}> {fileName}</Box>
                 </Button>
 
@@ -312,19 +331,6 @@ function App() {
             </form>
             
 
-            </div>
-
-            <div className="download-geodb">
-                <Typography variant="h6">
-
-                Download as Geodatabase
-                </Typography>
-                <Typography variant="h6"> 
-                Download as CSV
-                </Typography>
-                <Typography variant="h6"> 
-                Download as Excel
-                </Typography>
             </div>
 		</div>
 	);
