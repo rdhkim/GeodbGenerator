@@ -8,7 +8,7 @@ import "./App.scss";
 function App() {
 	// usestate for setting a javascript
 	// object for storing and using data
-	var rows = [];
+
     const [district, setDistrict] = useState(null);
     const [address, setAddress] = useState('');
     const [signType, setSignType] = useState('');
@@ -121,23 +121,35 @@ function App() {
         setDistrict(event.target.value);
     };
 
-	// Using useEffect for single rendering
-	useEffect(() => {
-		// Using fetch to fetch the api from
-		// flask server it will be redirected to proxy
-        if (loading == true) {
-            fetch("/get_db").then((res) =>
-			res.json().then((data) => {
-				// Setting a data from api
-                setDataGridProps({
-                    columns: columns,
-                    rows: data
-                    })
-			    })
-		    );
-            loading = false;
-        }
-	}, []);
+    const rows = [
+        {id: '1', address: "833 S B.B. King Blvd, Memphis, TN 38106, United States", district:'4', signType: 'advertisement', signTechnology: 'billboard', signSize: '672', signStatus: 'active', signCondition: 'good', parcelId: '478477943', parcelOwner: 'Jim Strickland', parcelOwnerAddress: '125 N. Main St.', businessName: 'City of Memphis', renewalStatus: '2024-04-25', photo: 'https://geodbphoto.blob.core.windows.net/geophoto/1.png'},
+        {id: '2', address: "201 Union Ave, Memphis, TN 38103, United States", district:'1', signType: 'advertisment', signTechnology: 'billboard', signSize: '546', signStatus: 'active', signCondition: 'poor', parcelId: '211215171', parcelOwner: 'Lou Jacobs', parcelOwnerAddress: "1550 Ingram Blvd, West Memphis, AR 72301, United States", businessName: 'Southland Casino', renewalStatus: '2024-04-25', photo: 'https://geodbphoto.blob.core.windows.net/geophoto/2.png'},
+        {id: '3', address: "398 S B.B. King Blvd, Memphis, TN 38126, United States", district:'3', signType: 'commercial', signTechnology: 'billboard', signSize: '823', signStatus: 'active', signCondition: 'good', parcelId: '143309203', parcelOwner: 'Brain Wallace', parcelOwnerAddress: "360 E E.H.Crump Blvd, Memphis, TN 38126, United States", businessName: 'Memphis Health Center', renewalStatus: '2024-04-25', photo: 'https://geodbphoto.blob.core.windows.net/geophoto/3.PNG'},
+        {id: '4', address: "291 E Pontotoc Ave, Memphis, TN 38126, United States", district:'7', signType: 'commercial', signTechnology: 'banner', signSize: '253', signStatus: 'active', signCondition: 'good', parcelId: '385273490', parcelOwner: 'Danny Thomas', parcelOwnerAddress: "262 Danny Thomas Pl, Memphis, TN 38105, United States", businessName: 'St. Jude Children\'s Research Hospital', renewalStatus: '2024-04-25', photo: 'https://geodbphoto.blob.core.windows.net/geophoto/4.PNG'},
+        {id: '5', address: "395 Union Ave, Memphis, TN 38103, United States", district:'12', signType: 'commercial', signTechnology: 'billboard', signSize: '811', signStatus: 'active', signCondition: 'good', parcelId: '178282106', parcelOwner: 'John Morgan', parcelOwnerAddress: "80 Monroe Ave Suite 900, Memphis, TN 38103, United States", businessName: 'Morgan & Morgan', renewalStatus: '2024-04-25', photo: 'https://geodbphoto.blob.core.windows.net/geophoto/5.PNG'},
+        {id: '9', address: "403 Union Ave, Memphis, TN 38103, United States", district:'9', signType: 'commercial', signTechnology: 'billboard', signSize: '880', signStatus: 'active', signCondition: 'good', parcelId: '346434015', parcelOwner: 'Raj Subramaniam', parcelOwnerAddress: "1573 Union Ave Suite A, Memphis, TN 38104, United States", businessName: 'FedEx', renewalStatus: '2024-04-25', photo: 'https://geodbphoto.blob.core.windows.net/geophoto/9.PNG'},
+        {id: '6', address: "200 Union Ave, Memphis, TN 38103, United States", district:'5', signType: 'commercial', signTechnology: 'sign', signSize: '332', signStatus: 'active', signCondition: 'good', parcelId: '510904852', parcelOwner: 'Clif Lee', parcelOwnerAddress: "100 S Main St Suite 101, Memphis, TN 38103, United States", businessName: 'Aldo\'s Pizza Pies', renewalStatus: '2024-04-25', photo: 'https://geodbphoto.blob.core.windows.net/geophoto/6.PNG'},
+        {id: '7', address: "179 E E.H.Crump Blvd, Memphis, TN 38106, United States", district:'10', signType: 'advertisment', signTechnology: 'billboard', signSize: '883', signStatus: 'active', signCondition: 'good', parcelId: '729047040', parcelOwner: 'Eric Mogy', parcelOwnerAddress: "200 Jefferson Ave Suite 811, Memphis, TN 38103, United States", businessName: 'Mogy Law Firm', renewalStatus: '2024-04-25', photo: 'https://geodbphoto.blob.core.windows.net/geophoto/7.PNG'},
+        {id: '8', address: "197 Beale St, Memphis, TN 38103, United States", district:'8', signType: 'commercial', signTechnology: 'electric', signSize: '686', signStatus: 'active', signCondition: 'fair', parcelId: '331642960', parcelOwner: 'Alfred Beale', parcelOwnerAddress: "197 Beale St, Memphis, TN 38103, United States", businessName: 'Alfred\'s On Beale', renewalStatus: '2024-04-25', photo: 'https://geodbphoto.blob.core.windows.net/geophoto/8.PNG'},
+        {id: '10', address: "370 Union Ave, Memphis, TN 38103, United States", district:'2', signType: 'commercial', signTechnology: 'sign', signSize: '973', signStatus: 'active', signCondition: 'good', parcelId: '707963688', parcelOwner: 'Joe Shoen', parcelOwnerAddress: "370 Union Ave, Memphis, TN 38103, United States", businessName: 'UHaul', renewalStatus: '2024-04-25', photo: 'https://geodbphoto.blob.core.windows.net/geophoto/10.PNG'}
+]
+	// // Using useEffect for single rendering
+	// useEffect(() => {
+	// 	// Using fetch to fetch the api from
+	// 	// flask server it will be redirected to proxy
+    //     if (loading == true) {
+    //         fetch("/get_db").then((res) =>
+	// 		res.json().then((data) => {
+	// 			// Setting a data from api
+    //             setDataGridProps({
+    //                 columns: columns,
+    //                 rows: data
+    //                 })
+	// 		    })
+	// 	    );
+    //         loading = false;
+    //     }
+	// }, []);
 
     const columns: GridColDef = [
         { field: 'id', headerName: 'Unique Id', width: 90 },
